@@ -9,6 +9,7 @@ Tecnicatura Superior en Desarrollo de Software Multiplataforma
 ## Descripción
 
 App de biblioteca desarrollada con React Native y Expo que permite:
+
 - Consultar el catálogo de libros
 - Buscar por título o autor
 - Escanear códigos de barras EAN-13
@@ -25,6 +26,7 @@ App de biblioteca desarrollada con React Native y Expo que permite:
 ## Cómo ejecutar el proyecto
 
 ### Requisitos previos
+
 - Node.js 18+ instalado
 - npm o yarn
 - Expo Go app instalada en tu teléfono (opcional, para probar en dispositivo real)
@@ -79,13 +81,13 @@ src/app/
 
 ### Navegadores
 
-- **Stack raíz**: _layout.tsx principal
+- **Stack raíz**: \_layout.tsx principal
   - Contiene todas las pantallas excepto las de pestañas
   - Modales: reservar/[isbn], permisos/[recurso], login
-- **Stack de la tab (tabs)**: (tabs)/_layout.tsx
+- **Stack de la tab (tabs)**: (tabs)/\_layout.tsx
   - Pestañas: Catálogo y Mis reservas
   - Dentro del Catálogo: libro/[isbn] (detalle)
-- **Tab Navigator**: (tabs)/_layout.tsx
+- **Tab Navigator**: (tabs)/\_layout.tsx
   - Catálogo (index.tsx)
   - Mis reservas (reservas.tsx)
 
@@ -113,6 +115,7 @@ src/app/
 ```
 
 **Justificación:**
+
 - **expo-camera**: Necesario para escanear códigos de barras
 - **expo-notifications**: Necesario para recordatorios de devolución
 - **microphonePermission: false**: La app NO graba audio, solo usa la cámara para códigos
@@ -134,6 +137,7 @@ src/app/
 
 **Justificación:**
 La app NO necesita:
+
 - **RECORD_AUDIO**: Solo escanea códigos visuales, no graba audio
 - **Location**: No usa geolocalización
 - **Storage/Media**: No accede a fotos ni archivos del dispositivo
@@ -142,10 +146,10 @@ Estos permisos están bloqueados para cumplir con el principio de mínimo privil
 
 ## Tabla de permisos
 
-| Recurso | Módulo | Cuándo se pide | Alternativa sin permiso |
-|---------|--------|----------------|-------------------------|
-| Cámara | expo-camera | Antes de escanear (pantalla /permisos/camara) | Ingresar ISBN manualmente |
-| Notificaciones | expo-notifications | Al activar "Recordarme" en un préstamo | Mostrar avisos dentro de la app (/reservas) |
+| Recurso        | Módulo             | Cuándo se pide                                | Alternativa sin permiso                     |
+| -------------- | ------------------ | --------------------------------------------- | ------------------------------------------- |
+| Cámara         | expo-camera        | Antes de escanear (pantalla /permisos/camara) | Ingresar ISBN manualmente                   |
+| Notificaciones | expo-notifications | Al activar "Recordarme" en un préstamo        | Mostrar avisos dentro de la app (/reservas) |
 
 ## Deep links de prueba
 
@@ -167,11 +171,13 @@ bibliotecaipf://ruta-inexistente         → Pantalla 404
 ## Estructuras de datos
 
 ### Pila (src/estructuras/Pila.ts)
+
 - **Uso**: Vistos recientemente
 - **Implementación**: LIFO con array y campos privados (#items)
 - **Métodos**: apilar(), desapilar(), verTope(), estaVacia(), tamanio, aArray()
 
 ### Cola (src/estructuras/Cola.ts)
+
 - **Uso**: Listas de espera de libros
 - **Implementación**: FIFO optimizada con índices (sin shift())
 - **Métodos**: encolar(), desencolar(), verFrente(), estaVacia(), tamanio, aArray()
@@ -179,23 +185,26 @@ bibliotecaipf://ruta-inexistente         → Pantalla 404
 ## Context global
 
 **AppContext** (src/context/AppContext.tsx) provee:
+
 - Préstamos activos
 - Listas de espera por ISBN
 - Vistos recientemente (Pila)
 - Sesión del personal
 - Avisos dentro de la app
 
-El provider está en el layout raíz (_layout.tsx).
+El provider está en el layout raíz (\_layout.tsx).
 
 ## Credenciales de prueba
 
 **Personal de biblioteca:**
+
 - Usuario: `biblioteca`
 - Clave: `ipf2026`
 
 ## Libros con ISBN real
 
 Los dos primeros libros del catálogo tienen ISBN reales para probar el escáner:
+
 1. **Cien años de soledad** - ISBN: 9788497592208
 2. **El principito** - ISBN: 9788478887194
 
@@ -235,3 +244,5 @@ npx expo start --clear
 ## Licencia
 
 Este proyecto es parte del Trabajo Práctico N° 4 de la materia React Native II del Instituto Politécnico Formosa.
+
+![alt text](image.png)

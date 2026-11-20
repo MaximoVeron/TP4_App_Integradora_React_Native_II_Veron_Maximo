@@ -1,56 +1,237 @@
-# Welcome to your Expo app 👋
+# Biblioteca IPF
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**Trabajo Práctico N° 4 — App integradora: React Native II**
 
-## Get started
+Alumno: **Veron Maximo**  
+Instituto Politécnico Formosa  
+Tecnicatura Superior en Desarrollo de Software Multiplataforma
 
-1. Install dependencies
+## Descripción
 
-   ```bash
-   npm install
-   ```
+App de biblioteca desarrollada con React Native y Expo que permite:
+- Consultar el catálogo de libros
+- Buscar por título o autor
+- Escanear códigos de barras EAN-13
+- Reservar libros y gestionar listas de espera
+- Recibir recordatorios de devolución
+- Panel de personal para entregar libros
 
-2. Start the app
+## Versión del SDK
 
-   ```bash
-   npx expo start
-   ```
+- **Expo SDK**: 58.0.26
+- **React Native**: 0.88.1
+- **Expo Router**: 58.0.32
 
-In the output, you'll find options to open the app in a
+## Cómo ejecutar el proyecto
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Requisitos previos
+- Node.js 18+ instalado
+- npm o yarn
+- Expo Go app instalada en tu teléfono (opcional, para probar en dispositivo real)
 
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+### Instalación
 
 ```bash
-npm run reset-project
+# Instalar dependencias
+npm install
+
+# Iniciar el servidor de desarrollo
+npx expo start
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+### Opciones de ejecución
 
-### Other setup steps
+```bash
+# En navegador web
+npx expo start --web
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+# En Android
+npx expo start --android
 
-## Learn more
+# En iOS
+npx expo start --ios
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+Luego escaneá el código QR con la app Expo Go (Android) o la cámara (iOS).
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Estructura de carpetas src/app
 
-## Join the community
+```
+src/app/
+├── _layout.tsx              # Layout raíz con AppProvider y configuración de notificaciones
+├── (tabs)/                  # Pestañas principales
+│   ├── _layout.tsx          # Layout de pestañas (Catálogo + Mis reservas)
+│   ├── index.tsx            # Catálogo: lista de libros con vistos recientemente
+│   └── reservas.tsx         # Mis reservas: préstamos y listas de espera
+├── libro/
+│   └── [isbn].tsx           # Detalle de un libro específico
+├── buscar.tsx               # Buscador por título o autor (con debounce)
+├── escanear.tsx             # Escáner de código de barras EAN-13
+├── reservar/
+│   └── [isbn].tsx           # Confirmación de reserva (modal)
+├── permisos/
+│   └── [recurso].tsx        # Pantalla previa de permisos (cámara/notificaciones)
+├── login.tsx                # Login del personal (modal)
+├── mostrador.tsx            # Panel de personal para entregar libros
+├── reserva.tsx              # Redirect: /reserva → /reservas
+└── +not-found.tsx           # Pantalla 404
+```
 
-Join our community of developers creating universal apps.
+### Navegadores
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- **Stack raíz**: _layout.tsx principal
+  - Contiene todas las pantallas excepto las de pestañas
+  - Modales: reservar/[isbn], permisos/[recurso], login
+- **Stack de la tab (tabs)**: (tabs)/_layout.tsx
+  - Pestañas: Catálogo y Mis reservas
+  - Dentro del Catálogo: libro/[isbn] (detalle)
+- **Tab Navigator**: (tabs)/_layout.tsx
+  - Catálogo (index.tsx)
+  - Mis reservas (reservas.tsx)
+
+## Configuración de app.json
+
+### Plugins configurados
+
+```json
+"plugins": [
+  "expo-router",
+  ["expo-splash-screen", {
+    "backgroundColor": "#208AEF",
+    "image": "./assets/images/splash-icon.png",
+    "imageWidth": 76
+  }],
+  ["expo-camera", {
+    "cameraPermission": "Usamos tu cámara para leer el código de barras del libro y abrir su ficha al instante.",
+    "microphonePermission": false,
+    "recordAudioAndroid": false
+  }],
+  ["expo-notifications", {
+    "color": "#208AEF"
+  }]
+]
+```
+
+**Justificación:**
+- **expo-camera**: Necesario para escanear códigos de barras
+- **expo-notifications**: Necesario para recordatorios de devolución
+- **microphonePermission: false**: La app NO graba audio, solo usa la cámara para códigos
+- **recordAudioAndroid: false**: Evita pedir permisos de micrófono en Android
+
+### blockedPermissions
+
+```json
+"blockedPermissions": [
+  "android.permission.RECORD_AUDIO",
+  "android.permission.ACCESS_FINE_LOCATION",
+  "android.permission.ACCESS_COARSE_LOCATION",
+  "android.permission.READ_EXTERNAL_STORAGE",
+  "android.permission.WRITE_EXTERNAL_STORAGE",
+  "android.permission.READ_MEDIA_IMAGES",
+  "android.permission.READ_MEDIA_VIDEO"
+]
+```
+
+**Justificación:**
+La app NO necesita:
+- **RECORD_AUDIO**: Solo escanea códigos visuales, no graba audio
+- **Location**: No usa geolocalización
+- **Storage/Media**: No accede a fotos ni archivos del dispositivo
+
+Estos permisos están bloqueados para cumplir con el principio de mínimo privilegio.
+
+## Tabla de permisos
+
+| Recurso | Módulo | Cuándo se pide | Alternativa sin permiso |
+|---------|--------|----------------|-------------------------|
+| Cámara | expo-camera | Antes de escanear (pantalla /permisos/camara) | Ingresar ISBN manualmente |
+| Notificaciones | expo-notifications | Al activar "Recordarme" en un préstamo | Mostrar avisos dentro de la app (/reservas) |
+
+## Deep links de prueba
+
+Con el scheme `bibliotecaipf`, los deep links son:
+
+```
+bibliotecaipf://                          → Catálogo
+bibliotecaipf://libro/9788497592208      → Detalle de Cien años de soledad
+bibliotecaipf://libro/123                → Detalle con ISBN inválido (mensaje de error)
+bibliotecaipf://buscar?q=borges          → Búsqueda de "borges"
+bibliotecaipf://escanear                 → Escáner de código de barras
+bibliotecaipf://reservas                 → Mis reservas
+bibliotecaipf://login                    → Login del personal
+bibliotecaipf://mostrador                → Mostrador (requiere sesión)
+bibliotecaipf://reserva                  → Redirect a /reservas
+bibliotecaipf://ruta-inexistente         → Pantalla 404
+```
+
+## Estructuras de datos
+
+### Pila (src/estructuras/Pila.ts)
+- **Uso**: Vistos recientemente
+- **Implementación**: LIFO con array y campos privados (#items)
+- **Métodos**: apilar(), desapilar(), verTope(), estaVacia(), tamanio, aArray()
+
+### Cola (src/estructuras/Cola.ts)
+- **Uso**: Listas de espera de libros
+- **Implementación**: FIFO optimizada con índices (sin shift())
+- **Métodos**: encolar(), desencolar(), verFrente(), estaVacia(), tamanio, aArray()
+
+## Context global
+
+**AppContext** (src/context/AppContext.tsx) provee:
+- Préstamos activos
+- Listas de espera por ISBN
+- Vistos recientemente (Pila)
+- Sesión del personal
+- Avisos dentro de la app
+
+El provider está en el layout raíz (_layout.tsx).
+
+## Credenciales de prueba
+
+**Personal de biblioteca:**
+- Usuario: `biblioteca`
+- Clave: `ipf2026`
+
+## Libros con ISBN real
+
+Los dos primeros libros del catálogo tienen ISBN reales para probar el escáner:
+1. **Cien años de soledad** - ISBN: 9788497592208
+2. **El principito** - ISBN: 9788478887194
+
+Reemplazá estos ISBN por los de tus libros reales si querés probar con ellos.
+
+## Modo demostración
+
+- **Recordatorios**: Se programan a los 15 segundos (en vez de 7 días) para pruebas rápidas
+- **Notificaciones**: Requieren development build para ver el texto de propósito personalizado
+
+## Desarrollo
+
+### Comandos útiles
+
+```bash
+# Verificar tipos TypeScript
+npx tsc --noEmit
+
+# Ejecutar lint
+npm run lint
+
+# Diagnosticar problemas
+npx expo-doctor
+
+# Limpiar caché
+npx expo start --clear
+```
+
+## Notas técnicas
+
+- **Typed Routes**: Habilitado en app.json (experiments.typedRoutes)
+- **React Compiler**: Habilitado para optimización automática
+- **Sin expo-permissions**: Usa los hooks específicos de cada módulo
+- **Sin console.log**: Código limpio para entrega
+- **Accesibilidad**: Botones con accessibilityRole y áreas táctiles mínimas de 44x44
+
+## Licencia
+
+Este proyecto es parte del Trabajo Práctico N° 4 de la materia React Native II del Instituto Politécnico Formosa.

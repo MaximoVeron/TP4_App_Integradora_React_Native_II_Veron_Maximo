@@ -1007,3 +1007,39 @@ Este trabajo práctico integró todos los conceptos vistos en el cuatrimestre:
 - **Permisos** (TP 3): Cámara, notificaciones, estados de permiso.
 
 Las buenas prácticas (TypeScript, lint, accesibilidad, organización) fueron transversales a todo el proyecto.
+
+---
+
+## Imágenes
+
+![image](images/image.png)
+
+![image copy 2](images/image%20copy%202.png)
+
+![image copy 3](images/image%20copy%203.png)
+
+![image copy 4](images/image%20copy%204.png)
+
+![image copy 5](images/image%20copy%205.png)
+
+![image copy 6](images/image%20copy%206.png)
+
+![image copy 7](images/image%20copy%207.png)
+
+![image copy 8](images/image%20copy%208.png)
+
+![image copy 9](images/image%20copy%209.png)
+
+![image copy 10](images/image%20copy%2010.png)
+
+![image copy 11](images/image%20copy%2011.png)
+
+![image copy 12](images/image%20copy%2012.png)
+
+![image copy 13](images/image%20copy%2013.png)
+
+![image copy 14](images/image%20copy%2014.png)
+
+![image copy 15](images/image%20copy%2015.png)
+
+![image copy 16](images/image%20copy%2016.png)

@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
-import { Stack } from 'expo-router';
+import { Pressable, StyleSheet, Text } from 'react-native';
+import { Stack, router } from 'expo-router';
 import * as Notifications from 'expo-notifications';
 import { AppProvider } from '@/context/AppContext';
 import { CANAL_PRESTAMOS } from '@/constants/biblioteca';
-import { colores } from '@/constants/tema';
+import { colores, espaciado } from '@/constants/tema';
 
 /**
  * Layout raíz de la app.
@@ -59,7 +60,20 @@ export default function RootLayout() {
         {/* Login del personal */}
         <Stack.Screen
           name="login"
-          options={{ title: 'Ingreso personal', presentation: 'modal' }}
+          options={{
+            title: 'Ingreso personal',
+            presentation: 'modal',
+            headerLeft: () => (
+              <Pressable
+                onPress={() => router.back()}
+                hitSlop={8}
+                accessibilityRole="button"
+                accessibilityLabel="Cerrar"
+              >
+                <Text style={estilos.botonCerrar}>Cerrar</Text>
+              </Pressable>
+            ),
+          }}
         />
 
         {/* Mostrador del personal */}
@@ -77,3 +91,12 @@ export default function RootLayout() {
     </AppProvider>
   );
 }
+
+const estilos = StyleSheet.create({
+  botonCerrar: {
+    fontSize: 16,
+    color: colores.primarioTexto,
+    paddingHorizontal: espaciado.sm,
+    paddingVertical: espaciado.xs,
+  },
+});

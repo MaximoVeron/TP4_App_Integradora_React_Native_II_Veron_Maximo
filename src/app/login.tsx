@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import {
-  Keyboard,
   KeyboardAvoidingView,
   Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { router } from 'expo-router';
@@ -67,63 +66,65 @@ export default function Login() {
       style={estilos.contenedor}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={estilos.inner}>
-          <View style={estilos.tarjeta}>
-            <Text style={estilos.titulo}>Ingreso del personal</Text>
+      <ScrollView
+        contentContainerStyle={estilos.inner}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+      >
+        <View style={estilos.tarjeta}>
+          <Text style={estilos.titulo}>Ingreso del personal</Text>
 
-            <View style={estilos.campo}>
-              <Text style={estilos.label}>Usuario</Text>
-              <TextInput
-                style={estilos.input}
-                value={usuario}
-                onChangeText={setUsuario}
-                placeholder="Usuario"
-                placeholderTextColor={colores.inactivo}
-                autoCapitalize="none"
-                autoCorrect={false}
-                autoComplete="username"
-                returnKeyType="next"
-                accessibilityLabel="Nombre de usuario"
-              />
-            </View>
-
-            <View style={estilos.campo}>
-              <Text style={estilos.label}>Clave</Text>
-              <TextInput
-                style={estilos.input}
-                value={clave}
-                onChangeText={setClave}
-                placeholder="Clave"
-                placeholderTextColor={colores.inactivo}
-                secureTextEntry
-                autoComplete="current-password"
-                returnKeyType="done"
-                onSubmitEditing={handleLogin}
-                accessibilityLabel="Contraseña"
-              />
-            </View>
-
-            {error && <Text style={estilos.error}>{error}</Text>}
+          <View style={estilos.campo}>
+            <Text style={estilos.label}>Usuario</Text>
+            <TextInput
+              style={estilos.input}
+              value={usuario}
+              onChangeText={setUsuario}
+              placeholder="Usuario"
+              placeholderTextColor={colores.inactivo}
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoComplete="username"
+              returnKeyType="next"
+              accessibilityLabel="Nombre de usuario"
+            />
           </View>
 
-          <Pressable
-            style={estilos.boton}
-            onPress={handleLogin}
-            accessibilityRole="button"
-          >
-            <Text style={estilos.textoBoton}>Ingresar</Text>
-          </Pressable>
+          <View style={estilos.campo}>
+            <Text style={estilos.label}>Clave</Text>
+            <TextInput
+              style={estilos.input}
+              value={clave}
+              onChangeText={setClave}
+              placeholder="Clave"
+              placeholderTextColor={colores.inactivo}
+              secureTextEntry
+              autoComplete="current-password"
+              returnKeyType="done"
+              onSubmitEditing={handleLogin}
+              accessibilityLabel="Contraseña"
+            />
+          </View>
 
-          <Pressable
-            style={estilos.botonCancelar}
-            onPress={() => router.back()}
-            accessibilityRole="button"
-          >
-            <Text style={estilos.textoCancelar}>Cancelar</Text>
-          </Pressable>
+          {error && <Text style={estilos.error}>{error}</Text>}
         </View>
-      </TouchableWithoutFeedback>
+
+        <Pressable
+          style={estilos.boton}
+          onPress={handleLogin}
+          accessibilityRole="button"
+        >
+          <Text style={estilos.textoBoton}>Ingresar</Text>
+        </Pressable>
+
+        <Pressable
+          style={estilos.botonCancelar}
+          onPress={() => router.back()}
+          accessibilityRole="button"
+        >
+          <Text style={estilos.textoCancelar}>Cancelar</Text>
+        </Pressable>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }

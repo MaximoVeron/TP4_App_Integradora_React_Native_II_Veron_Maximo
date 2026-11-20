@@ -194,15 +194,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   /**
    * Agregar un libro a los vistos recientemente.
-   * Si ya está en el tope, no se apila de nuevo.
+   * Si ya existe en la pila, se elimina y se coloca en el tope.
    */
   const agregarReciente = useCallback((libro: Libro) => {
     setRecientes((prev) => {
-      const nueva = new Pila(prev.aArray());
-      // Si ya está en el tope, no apilar
-      if (nueva.verTope()?.isbn === libro.isbn) {
-        return nueva;
-      }
+      // Eliminar cualquier ocurrencia previa del libro (por ISBN)
+      const arraySinDuplicados = prev.aArray().filter((l) => l.isbn !== libro.isbn);
+      const nueva = new Pila(arraySinDuplicados);
       nueva.apilar(libro);
       // Mantener solo los últimos 10 (para tener más opciones)
       const array = nueva.aArray();
